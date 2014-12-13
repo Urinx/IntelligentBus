@@ -57,3 +57,5 @@ var getMinDis = function(busArr,dist){
 };
 
 Ajax(busOpt);
+
+// 
