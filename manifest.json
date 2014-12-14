@@ -3,30 +3,33 @@
     
     "name": "智能公交",
     "description": "智能公交:最精准的实时公交,实时位置尽览无余,多线路车辆到站查询",
-    "version": "1.0",
+    "version": "0.2",
     "minimum_chrome_version": "17",
 
     "permissions": [
         "http://*/*",
         "https://*/*",
         "tabs",
+        "activeTab",
         "bookmarks",
-        "contextMenus"
+        "contextMenus",
+        "notifications",
+        "storage"
     ],
 
     "icons":{
-        "16": "icon.png",
-        "48": "icon.png",
-        "128": "icon.png"
+        "16": "./asserts/img/icon.png",
+        "48": "./asserts/img/icon.png",
+        "128": "./asserts/img/icon.png"
     },
 
     "browser_action": {
         "default_title": "Intelligent Bus",
-        "default_icon": "icon.png",
-        "default_popup": "popup.html"
+        "default_icon": "./asserts/img/icon.png",
+        "default_popup": "./html/popup.html"
     },
 
     "background": {
-        "scripts": ["background.js"]
+        "scripts": ["./js/background.js"]
     }
 }
