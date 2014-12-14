@@ -69,10 +69,13 @@ var Bus = function(lineNo, stopId, direction){
 };
 Bus.prototype = {
 	init: function(){
+		var self = this;
 		// bind event
 		O_o(this, 'data', this.onDataChange);
-		// get data
-		this.update();
+		// O_o(this.status, 'minDistance', this.alert);
+		// setInterval(function(){
+		// 	self.update();
+		// },10000);
 	},
 	update: function(){
 		Ajax(this.ajaxOpt);
@@ -87,21 +90,23 @@ Bus.prototype = {
 		self.status.curOrder = self.getCurrentOrder(self.stopId,data.map);
 		self.status.minDistance = self.getMinDistance(self.status.curOrder, data.bus);
 		self.status.nearBusNum = self.getNearBusNum(self.status.curOrder, data.bus);
-		console.log(self);
+		self.status.timePredict = self.getTimePredict(self.status.minDistance);
 	},
 	getMinDistance: function(curOrder, busArr){
-		var nearBus = busArr.filter(function(b){
+		var _default = {order:0,arrived:1},
+			nearBus = busArr.filter(function(b){
 			return b.order <= curOrder;
-		}).pop();
+		}).pop() || _default;
 		return curOrder - nearBus.order + (nearBus.arrived ? 0:0.5);
 	},
 	getNearBusNum: function(curOrder, busArr){
-		return (busArr.filter(function(b){
+		var nearBus = busArr.filter(function(b){
 			return b.order <= curOrder;
-		}).pop())['busNum'];
+		}).pop() || {busNum:0};
+		return nearBus.busNum;
 	},
 	getTimePredict: function(dist){
-		return dist*2;
+		return dist*1;
 	},
 	getCurrentStopName: function(stopId, map){
 		return map.filter(function(p){
@@ -113,6 +118,11 @@ Bus.prototype = {
 			return p.stopId === stopId;
 		})[0]['order'];
 	},
+	// alert: function(){
+	// 	var title_content = '当前有xx辆公交正在驶来\n距xx有xx站距离';
+	// 	var body_content = '预计xx分钟内到达';
+	// 	notify(title_content, body_content, 'asserts/img/bus-128.png');
+	// },
 };
 //##########################################
 var BusNotifyer = function(bus){
@@ -124,13 +134,13 @@ BusNotifyer.prototype = {
 		O_o(this.bus.status, 'minDistance', this.alert);
 		
 		setInterval(function(){
-			console.log(this.bus);
-			//this.bus.update();
+			//console.log(this.bus);
+			this.bus.update();
 		},10000);
 	},
 	alert: function(){
-		var title_content = '当前有xx辆公交正在驶来\n距xx有xx站距离';
-		var body_content = '预计xx分钟内到达';
+		var title_content = '当前有{{busNum}}辆公交正在驶来\n距{{curStopNmae}}有{{minDistance}}站距离';
+		var body_content = '预计{{timePredict}}分钟内到达';
 		notify(title_content, body_content, 'asserts/img/bus-128.png');
 	},
 };
