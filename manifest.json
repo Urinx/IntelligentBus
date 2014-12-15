@@ -3,7 +3,7 @@
     
     "name": "智能公交",
     "description": "智能公交:最精准的实时公交,实时位置尽览无余,多线路车辆到站查询",
-    "version": "0.2",
+    "version": "0.6",
     "minimum_chrome_version": "17",
 
     "permissions": [
@@ -16,6 +16,8 @@
         "notifications",
         "storage"
     ],
+
+    "omnibox": { "keyword":"bus" },
 
     "icons":{
         "16": "./asserts/img/icon.png",
@@ -31,5 +33,9 @@
 
     "background": {
         "scripts": ["./js/background.js"]
+    },
+
+    "chrome_url_overrides": {
+        "newtab": "./html/newtab.html"
     }
 }
